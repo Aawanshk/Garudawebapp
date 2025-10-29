@@ -1,6 +1,9 @@
 # Flask web framework
 Flask==2.3.3
 
+# Environment variable management
+python-dotenv==1.0.0
+
 # Azure Application Insights integration
 opencensus-ext-azure==1.1.15
 opencensus-ext-flask==0.8.2

@@ -5,15 +5,22 @@ from opencensus.ext.azure.log_exporter import AzureLogHandler
 from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 from opencensus.trace.samplers import AlwaysOnSampler
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # --- Application Insights Setup (CRITICAL) ---
-# The connection string will be automatically set by Azure App Service
-# if you enable Application Insights through the Azure Portal.
-# We fetch it here just in case, but rely on the environment variable set by Azure.
+# The connection string will be loaded from .env file for local development
+# or from Azure App Service environment variables in production
 CONNECTION_STRING = os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING")
 
 # 1. Initialize Flask App
 app = Flask(__name__)
+
+# Configure Flask app from environment variables
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+app.config['DEBUG'] = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
 
 # 2. Configure OpenCensus Middleware for Flask
 if CONNECTION_STRING:
